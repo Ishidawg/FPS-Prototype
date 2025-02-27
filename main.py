@@ -2,10 +2,16 @@ from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.health_bar import HealthBar
 
-app = Ursina(
-    title='FPS Prototype'
-)
+# Importing packages
+from game.settings import ammo, close_fov, default_fov
+from game.player import create_player
+from game.entities import create_entities
+from game.game_logic import set_game_objects, update_handler, input_handler
+from game.enemies import Enemy
 
+app = Ursina(title='FPS Prototype')
+
+# Window settings, I dont like that default dev options...
 window.borderless = False
 window.exit_button.visible = False
 window.fps_counter.visible = False
@@ -14,8 +20,8 @@ window.collider_counter.visible = False
 window.cog_menu.visible = False
 window.cog_button.visible = False
 
-ammo = 10
 
+# Creating a solid base, label, ground, lights and shit...
 ammo_label = Text(
     text=f"Ammo: {ammo}",
     position=(.2, .425, 0)
@@ -23,7 +29,7 @@ ammo_label = Text(
 
 sky_box = Sky(
     texture="sky_sunset",
-    scale= 2
+    scale=2
 )
 
 ground = Entity(
@@ -53,9 +59,10 @@ point_light = PointLight(
     color=color.rgb(255, 60, 0) * 0.020
 )
 
-player = FirstPersonController(
-    position=(0, 80, 0)
-)   
+# Calls the function to create a player, from: game/player.py
+player = create_player()
+
+enemy1 = Enemy(position=(5, 50, 5), speed=1, health=30)
 
 health_bar = HealthBar(
     bar_color=color.lime.tint(-.25),
@@ -65,86 +72,20 @@ health_bar = HealthBar(
     scale=(.5, .05)
 )
 
-pistol = Entity(
-    parent=camera,
-    model="models/pistol.obj",
-    scale=0.65,
-    position=(0.4, -1, 1),
-    rotation=(0, -90, 0)
+pistol, middle_pistol = create_entities()
 
+set_game_objects(
+    player=player,
+    ammo_label=ammo_label,
+    pistol=pistol,
+    middle_pistol=middle_pistol,
+    health_bar=health_bar
 )
-
-middle_pistol = Entity(
-    parent=camera,
-    model="models/pistol.obj",
-    scale=0.85,
-    position=(0.005, -1.2, .85),
-    rotation=(0, -90, 0),
-    visible=False
-)
-
-close_fov = 80
-default_fov = 100
-
-class Bullet(Entity):
-    def __init__(self, position, direction):
-        super().__init__(
-            model='models/bullet.obj',
-            scale=0.75,
-            position=position,
-            collider='mesh'
-        )
-        self.direction = direction
-
-    def update(self):
-        self.position += self.direction * 80 * time.dt
-        if distance(self.position, player.position) > 20:
-            destroy(self)
-
-def shoot():
-    global ammo
-
-    bullet = Bullet(
-        position=camera.world_position + camera.forward * 2,
-        direction=camera.forward,
-    )
-
-    shooting_sound = Audio("sound/shoot.mp3")
-    shooting_sound.volume = .2
-
-    ammo = ammo - 1
-    ammo_label.text = f"Ammo: {ammo}"
-
-def take_damage(amount):
-    health_bar.value -= amount
-    health_bar.value = max(0, health_bar.value)
-
-    if health_bar.value <= 0:
-        application.quit()
 
 def update():
-    if held_keys['h']:
-        take_damage(1)
+    update_handler()
 
 def input(key):
-    if key == 'escape':
-        application.quit()
-
-    if key == 'left mouse down':
-        if ammo > 0:
-            shoot()
-
-    if key == 'right mouse down':
-        pistol.visible = False
-        middle_pistol.visible = True
-        camera.animate('fov', close_fov, duration=0.15, curve=curve.in_out_expo)
-        player.cursor.visible = False
-
-    if key == 'right mouse up':
-        pistol.visible = True
-        middle_pistol.visible = False
-        camera.animate('fov', default_fov, duration=0.15, curve=curve.in_out_expo)
-        player.cursor.visible = True
-
+    input_handler(key)
 
 app.run()
