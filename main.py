@@ -6,7 +6,7 @@ from ursina.prefabs.health_bar import HealthBar
 from game.settings import ammo, close_fov, default_fov
 from game.player import create_player
 from game.entities import create_entities
-from game.game_logic import set_game_objects, update_handler, input_handler
+from game.game_logic import set_game_objects, update_handler, input_handler, enemy_spawn_loop
 from game.enemies import Enemy
 
 app = Ursina(title='FPS Prototype')
@@ -29,17 +29,19 @@ ammo_label = Text(
 
 sky_box = Sky(
     texture="sky_sunset",
-    scale=2
+    scale=2,
+    render_queue=-1
 )
 
 ground = Entity(
-    model="models/ground.obj",
+    model="models/flat_ground.obj",
     texture="grass",
     double_sided=True,
     position=(10, 0, 0),
     rotation=(0, 0, 0),
-    scale=2,
-    collider="mesh"
+    scale=1,
+    collider="box",
+    render_queue = 0
 )
 
 ambient_light = AmbientLight(
@@ -59,10 +61,21 @@ point_light = PointLight(
     color=color.rgb(255, 60, 0) * 0.020
 )
 
+# Audio
+
+from game.game_logic import set_audio_objects
+
+shooting_sound = Audio("sound/shoot.mp3", autoplay=False)
+shooting_sound.volume = 0.2
+
+reloading_sound = Audio("sound/reloading.mp3", autoplay=False)
+reloading_sound.volume = 0.2
+
+set_audio_objects(shooting_sound, reloading_sound)
+
 # Calls the function to create a player, from: game/player.py
 player = create_player()
 
-enemy1 = Enemy(position=(5, 50, 5), speed=1, health=30)
 
 health_bar = HealthBar(
     bar_color=color.lime.tint(-.25),
@@ -81,6 +94,8 @@ set_game_objects(
     middle_pistol=middle_pistol,
     health_bar=health_bar
 )
+
+# enemy_spawn_loop()
 
 def update():
     update_handler()
