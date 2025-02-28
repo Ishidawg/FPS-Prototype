@@ -35,6 +35,7 @@ def create_entities():
         scale=0.65,
         position=(0.4, -1, 1),
         rotation=(0, -90, 0),
+        collider="mesh"
         # always_on_top=True,
         # render_queue=1,
         # disable_depth_test=True,
@@ -47,6 +48,7 @@ def create_entities():
         position=(0.005, -1.2, 0.85),
         rotation=(0, -90, 0),
         visible=False,
+        collider="mesh"
         # always_on_top=True,
         # render_queue=1,
         # disable_depth_test=True,

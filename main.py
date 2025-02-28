@@ -34,13 +34,13 @@ sky_box = Sky(
 )
 
 ground = Entity(
-    model="models/ground.obj",
+    model="models/flat_ground.obj",
     texture="grass",
     double_sided=True,
     position=(10, 0, 0),
     rotation=(0, 0, 0),
-    scale=2,
-    collider="mesh",
+    scale=1,
+    collider="box",
     render_queue = 0
 )
 
@@ -60,6 +60,18 @@ point_light = PointLight(
     position=(0, 0, -12), 
     color=color.rgb(255, 60, 0) * 0.020
 )
+
+# Audio
+
+from game.game_logic import set_audio_objects
+
+shooting_sound = Audio("sound/shoot.mp3", autoplay=False)
+shooting_sound.volume = 0.2
+
+reloading_sound = Audio("sound/reloading.mp3", autoplay=False)
+reloading_sound.volume = 0.2
+
+set_audio_objects(shooting_sound, reloading_sound)
 
 # Calls the function to create a player, from: game/player.py
 player = create_player()

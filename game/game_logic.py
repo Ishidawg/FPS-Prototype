@@ -17,6 +17,18 @@ is_aiming = False
 is_shooting = False
 is_crouch = False
 
+audio_objects = {}
+
+def set_audio_objects(shoot_obj, reload_obj):
+    audio_objects['shooting_sound'] = shoot_obj
+    audio_objects['reloading_sound'] = reload_obj
+
+# shooting_sound = Audio("sound/shoot.mp3", autoplay=False)
+# shooting_sound.volume = .2
+
+# reloading_sound = Audio("sound/reloading.mp3", autoplay=False)
+# reloading_sound.volume = .2
+
 global_ammo = {'ammo': initial_ammo}
 
 running_pos_pistol_both = Vec3(0, -100, 5)
@@ -49,8 +61,7 @@ def shoot():
     if ammo_label:
         ammo_label.text = f"Ammo: {global_ammo['ammo']}"
     
-    shooting_sound = Audio("sound/shoot.mp3")
-    shooting_sound.volume = .2
+    # Audio("sound/shoot.mp3", autoplay=True, volume=0.2) Needs tweaking
 
 def take_damage(amount):
     health_bar = game_objects.get('health_bar')
@@ -158,8 +169,8 @@ def recharge_weapon():
     pistol.animate('position', reload_pos_pistol, duration=0.15, curve=curve.in_out_expo)
     middle_pistol.animate('position', reload_pos_middle, duration=0.15, curve=curve.in_out_expo)
     
-    reloading_sound = Audio("sound/reloading.mp3")
-    reloading_sound.volume = .2
+    if 'reloading_sound' in audio_objects:
+        audio_objects['reloading_sound'].play()
     
     invoke(reset_both_weapon_model_position, delay=0.3)
     
