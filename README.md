@@ -1,14 +1,6 @@
 # FPS Prototye 🔫
-> **A FPS prototype using Ursina Game Engine**
+> A FPS prototype made in Ursina when I was lost in thoughts and did not knew what to do with my career.
 
-I have decided to create a 3D game, which is, in fact, my first attempt at developing a 3D game, using a different framework/engine. The last time I made a game, I used the PyGame framework, and it was quite enjoyable, but I am unsure whether I could create a 3D game with it. Therefore, after conducting some research, I discovered the Ursina Game Engine (which lacks a UI, so I do not believe it is an engine per se, but rather a framework).
+I was learning some *3D modeling* on [Blender](https://www.blender.org/) and  decide to use my **professional assets on a game**. I know python a bit and has made a [project](https://github.com/Ishidawg/Asteroids-Survival) using [`pyGame`](https://www.pygame.org/news) back in the day, so python even thought is not a good language to create games, was a obvious choice *to me*, so I've discovered [Ursina](https://www.ursinaengine.org/) a *"Python powered, open source game engine"*.
 
-This idea also stemmed from my love for game modding. Thus, in addition to learning more about game development and enhancing my skills as a programmer, I aim to improve my abilities in UI & UX, 3D Modeling (using Blender), creating textures in various artistic styles, etc.!.
-
-
-## What I used to make it 📑
-- **Code editor:** VSCODE
-- **Language:** Python
-- **Library:** Ursina
-- **Image Manipulation:** Paint.net, GIMP and Photoshop
-- **3D Software:** Blender
+*Maybe I come back here some day and finish this, maybe not in python, may in python, perhaps, how knows crap these days...*
